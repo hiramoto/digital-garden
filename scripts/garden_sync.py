@@ -420,6 +420,20 @@ def cmd_report(args):
             print("  -", i.removeprefix("content/"))
 
 
+# ---------------------------------------------------------------- show
+
+def cmd_show(args):
+    """Print the decoded text of files fetched with download_file_content."""
+    _, downloads, _ = collect()
+    for fid in args.ids:
+        d = downloads.get(fid)
+        if not d:
+            print(f"=== {fid}: not downloaded in this session ===")
+            continue
+        print(f"=== {d.get('title')} ({fid}) ===")
+        print(base64.b64decode(d["content"]).decode("utf-8", errors="replace"))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -428,11 +442,15 @@ def main():
                    help="re-download every published note (e.g. after changing decorate())")
     sub.add_parser("apply")
     sub.add_parser("report")
+    sp = sub.add_parser("show", help="print downloaded files as text")
+    sp.add_argument("ids", nargs="+")
     args = ap.parse_args()
     if args.cmd == "plan":
         cmd_plan(args)
     elif args.cmd == "apply":
         cmd_apply(args)
+    elif args.cmd == "show":
+        cmd_show(args)
     else:
         cmd_report(args)
 
