@@ -1,0 +1,22 @@
+{
+  "_comment": "Drive folder ids of the Obsidian vault. root = vault root (My Drive/.../obsidian). exclude = folders never published even if a note there has publish: true. paths = known folders (vault-relative); anything else is resolved from get_file_metadata results.",
+  "root": "1ur-1jztksbiuUvGbNhaIYCnMsnSxRw3C",
+  "exclude": [
+    "1ErbCVxMNjceNHVVxbZxe_skjE60UAR3d",
+    "1m93FptyMZCHRPsOVtd5zlRRDxlxfQbNo",
+    "1b6yJ_BqUMaFLDBZvZx4DtGZf3PWiHnvl",
+    "1eSopA7FhZBsFV_yqIBnRrtLSZPidAImu"
+  ],
+  "exclude_names": {
+    "1ErbCVxMNjceNHVVxbZxe_skjE60UAR3d": ".obsidian",
+    "1m93FptyMZCHRPsOVtd5zlRRDxlxfQbNo": "garden/quartz",
+    "1b6yJ_BqUMaFLDBZvZx4DtGZf3PWiHnvl": "template",
+    "1eSopA7FhZBsFV_yqIBnRrtLSZPidAImu": "garden/.github"
+  },
+  "paths": {
+    "1vFKUjjbwBcDLKUVw4g04f9xPeTtRdSj7": "4-book",
+    "1uWnz03ImpJ1d9rnXB2S2bS9V9z2uh5HJ": "4-cards",
+    "1EdB3RiuEwRR7jPFCJP7ur7Jww8sbSa6v": "4-cards/uxo",
+    "1wgrhvz9os2tbQZqO0IBnD85QCxGSDoJ6": "garden"
+  }
+}
