@@ -37,6 +37,15 @@ a.internal {
     }
   }
 
+  // タグページは実在するが、リンク判定では未公開扱いになるので元に戻す
+  &.broken[data-slug^="tags/"] {
+    color: var(--secondary);
+    pointer-events: auto;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--secondary) 45%, transparent);
+  }
+
   // タグは下線ではなく小さなラベルにする
   &.tag-link {
     text-decoration: none;
@@ -49,6 +58,11 @@ a.internal {
     &:hover {
       color: var(--secondary);
       border-color: var(--secondary);
+    }
+
+    &.broken[data-slug^="tags/"] {
+      color: var(--darkgray);
+      text-decoration: none;
     }
   }
 }
