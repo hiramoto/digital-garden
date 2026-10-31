@@ -1,4 +1,5 @@
 ---
+modified: 2026-01-31
 type: book
 Title: SHIFT：イノベーションの作法
 Author: 濱口 秀司

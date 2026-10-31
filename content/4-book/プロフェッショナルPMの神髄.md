@@ -1,4 +1,6 @@
 ---
+title: "失敗しないITマネジャーが語る プロフェッショナルPMの神髄"
+modified: 2026-01-31
 type: book
 Title: 失敗しないITマネジャーが語る プロフェッショナルPMの神髄
 Author: 室脇慶彦

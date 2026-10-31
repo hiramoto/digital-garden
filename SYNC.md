@@ -12,6 +12,12 @@ Cloudflare Pages が push を検知してビルド・公開する。
   届かないので、`scripts/garden_sync.py` はツールの結果をセッションの記録
   （`~/.claude/projects/**/*.jsonl` と `tool-results/*.txt`）から読み、base64 をそのまま
   デコードして書き出す。**ノート本文をモデルが書き写すことは一切しない。**
+- 書き出すときに、表示用のフロントマターだけを足す（既にあるキーは触らない）。
+  - `title`：ファイル名先頭のタイムスタンプ（`20210419222442_` など）を除いた表示名。
+    フロントマターに `Title:` があればそれを使う。
+  - `modified`：Drive の最終更新日。一覧ページの日付になる。
+  - `created`：ファイル名がタイムスタンプで始まる場合、その日付。
+  Drive 上の元ファイルは変更しない。
 - `.garden/state.json` に Drive のファイルID・パス・更新日時を記録し、変わったものだけを取得する。
 - `.garden/folders.json` が Vault のルートと除外フォルダ（`.obsidian`, `template`,
   `garden/quartz` など）を定義する。
@@ -49,4 +55,6 @@ Cloudflare Pages が push を検知してビルド・公開する。
 - 非公開に戻す：`publish: true` を外す（または `false` にする）。次回の同期でサイトから消える。
 - 画像：公開ノートが `![[画像.png]]` で参照している画像だけが `content/attachments/` に入る。
   参照されなくなった画像は自動で消える。
-- `content/index.md` はトップページで、同期の対象外（手で編集する）。
+- `content/index.md`（トップページ）と `content/4-book/index.md`・`content/4-cards/index.md`
+  （フォルダの表示名「読書メモ」「カード」）は同期の対象外で、手で編集する。
+- 表示用フロントマターの付け方を変えたときは `plan --refresh` で全ノートを取り直す。

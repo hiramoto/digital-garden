@@ -164,6 +164,53 @@ def is_published(text: str) -> bool:
     return v is True or (isinstance(v, str) and v.strip().lower() == "true")
 
 
+# Leading timestamp in Obsidian note names: 20210419222442_ / 202312302146 / 20230111220157 etc.
+STAMP_RE = re.compile(r"^(?P<stamp>\d{12}(?:\d{2})?)(?:[ _\-]+|$)")
+
+
+def display_title(stem: str, fm: dict) -> str:
+    for key in ("title", "Title"):
+        v = fm.get(key)
+        if isinstance(v, str) and v.strip():
+            return v.strip()
+    m = STAMP_RE.match(stem)
+    rest = stem[m.end():].strip() if m else stem
+    return rest or stem
+
+
+def decorate(text: str, rel_path: str, modified_time: str | None) -> str:
+    """Add display-only frontmatter (title / created / modified) to the synced copy.
+
+    The note body and existing keys are left untouched; keys are only added
+    when absent, right after the opening '---'. Drive is never modified.
+    """
+    m = re.match(r"^(﻿?---\r?\n)(.*?)(\r?\n---\s*(?:\r?\n|$))", text, re.S)
+    if not m:
+        return text
+    try:
+        fm = yaml.safe_load(m.group(2)) or {}
+    except Exception:
+        return text
+    if not isinstance(fm, dict):
+        return text
+    stem = Path(rel_path).stem
+    add = []
+    if "title" not in fm:
+        title = display_title(stem, fm)
+        if title != stem:
+            add.append(f"title: {json.dumps(title, ensure_ascii=False)}")
+    if "modified" not in fm and modified_time:
+        add.append(f"modified: {modified_time[:10]}")
+    stamp = STAMP_RE.match(stem)
+    if "created" not in fm and stamp:
+        s = stamp.group("stamp")
+        add.append(f"created: {s[0:4]}-{s[4:6]}-{s[6:8]}")
+    if not add:
+        return text
+    nl = "\r\n" if m.group(1).endswith("\r\n") else "\n"
+    return m.group(1) + nl.join(add) + nl + text[m.end(1):]
+
+
 # ---------------------------------------------------------------- plan
 
 def cmd_plan(args):
@@ -207,7 +254,8 @@ def cmd_plan(args):
     download, keep, delete = [], [], []
     for fid, c in candidates.items():
         old = state["notes"].get(fid) or state["skipped"].get(fid)
-        if old and old.get("modifiedTime") == c["modifiedTime"] and old.get("path") == c["path"]:
+        if (not args.refresh and old and old.get("modifiedTime") == c["modifiedTime"]
+                and old.get("path") == c["path"]):
             keep.append(fid)
         else:
             download.append(fid)
@@ -297,7 +345,7 @@ def cmd_apply(args):
             continue
         dest = safe_join(CONTENT, c["path"])
         dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_bytes(raw)
+        dest.write_text(decorate(text, c["path"], c["modifiedTime"]), encoding="utf-8", newline="")
         state["notes"][fid] = {"path": c["path"], "modifiedTime": c["modifiedTime"], "status": MANAGED_MARK}
         state["skipped"].pop(fid, None)
         written.append(c["path"])
@@ -375,7 +423,9 @@ def cmd_report(args):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("plan")
+    p = sub.add_parser("plan")
+    p.add_argument("--refresh", action="store_true",
+                   help="re-download every published note (e.g. after changing decorate())")
     sub.add_parser("apply")
     sub.add_parser("report")
     args = ap.parse_args()

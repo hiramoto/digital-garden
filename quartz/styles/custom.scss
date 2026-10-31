@@ -1,3 +1,121 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+// ---------------------------------------------------------------------------
+// kazaimu notes — 読みやすさの調整
+// ---------------------------------------------------------------------------
+
+// 本文は少しゆったり、日本語向けの行間に
+article {
+  line-height: 1.85;
+}
+
+// 内部リンク：背景色をやめ、下線だけで示す
+a.internal {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in srgb, var(--secondary) 45%, transparent);
+
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+
+  // 公開していないノートへのリンクは、ただの文字として表示する
+  &.broken {
+    color: inherit;
+    opacity: 1;
+    text-decoration: none;
+    pointer-events: none;
+    cursor: text;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // タグは下線ではなく小さなラベルにする
+  &.tag-link {
+    text-decoration: none;
+    font-size: 0.85em;
+    padding: 0.05em 0.45em;
+    border-radius: 999px;
+    border: 1px solid var(--lightgray);
+    color: var(--darkgray);
+
+    &:hover {
+      color: var(--secondary);
+      border-color: var(--secondary);
+    }
+  }
+}
+
+// 一覧ページ：日付とタイトルの2列にし、タグは出さない
+.page-listing .section-li > .section {
+  grid-template-columns: 8.5em 1fr;
+  align-items: baseline;
+
+  & > .tags {
+    display: none;
+  }
+
+  & .meta {
+    font-size: 0.9em;
+  }
+
+  & > .desc > h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  & > .desc > h3 > a {
+    text-decoration: none;
+  }
+}
+
+// トップページの入口カード
+.garden-entrances {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  padding: 0;
+  list-style: none;
+
+  & > li {
+    margin: 0;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+    line-height: 1.6;
+  }
+
+  & a.internal {
+    font-size: 1.15rem;
+    font-weight: $semiBoldWeight;
+    text-decoration: none;
+  }
+
+  & p {
+    margin: 0.35rem 0 0;
+    color: var(--darkgray);
+    font-size: 0.92rem;
+  }
+}
+
+// 最近更新したノート（トップのみ）
+.recent-notes {
+  margin-top: 1rem;
+
+  & > h3 {
+    font-size: 1.1rem;
+  }
+
+  & a.internal {
+    text-decoration: none;
+  }
+}
