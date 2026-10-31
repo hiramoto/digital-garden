@@ -17,6 +17,11 @@ Obsidianで書きためている読書メモとカードのうち、公開して
   </li>
 </ul>
 
-よく出てくるテーマ：[[tags/国際協力|国際協力]]・[[tags/000_コンピュータ科学・情報・総記|コンピュータ・情報]]・[[tags/言語化|言語化]]・[[tags/勉強会|勉強会]]・[[tags/|すべてのタグ]]
+<p>よく出てくるテーマ：
+<a class="internal tag-link" href="./tags/国際協力">国際協力</a>
+<a class="internal tag-link" href="./tags/000_コンピュータ科学・情報・総記">コンピュータ・情報</a>
+<a class="internal tag-link" href="./tags/言語化">言語化</a>
+<a class="internal tag-link" href="./tags/勉強会">勉強会</a>
+<a class="internal" href="./tags/">すべてのタグ →</a></p>
 
 本文中のグレーの文字は、まだ公開していないノートへのリンクです。
